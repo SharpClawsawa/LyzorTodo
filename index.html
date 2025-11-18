@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>课程状态</title>
+    <title>利爪的日程状态</title>
     <style>
         * {
             margin: 0;
@@ -206,8 +206,19 @@
             opacity: 0.7;
         }
 
+        /* 页面标题样式 */
+        .page-title {
+            font-size: 4rem;
+            text-align: left;
+            margin-bottom: 30px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+            color: white;
+            letter-spacing: 1px;
+        }
+
         /* 移动端优化 */
         @media (max-width: 768px) {
+
             /* 时间显示区域优化 */
             .time-section {
                 padding: 20px 5%;
@@ -370,6 +381,7 @@
 <body>
     <!-- 时间显示区域 -->
     <div class="time-section">
+        <div class="page-title">利爪现在在做什么？</div>
         <div class="current-time" id="currentTime">--:--:--</div>
         <div class="status-main" id="statusMain">加载中...</div>
         <div class="status-detail" id="statusDetail"></div>
@@ -381,10 +393,13 @@
 
     <!-- 课程表区域 -->
     <div class="schedule-section">
-        <div class="section-title">📅 利爪的本周日程</div>
+        <div class="section-title" id="weekTitle">📅 本周日程 - 第<span id="weekNumber">1</span>周</div>
         <div class="courses-container" id="coursesContainer">
             <div class="no-courses">正在加载中~别急...</div>
         </div>
+        <footer class="site-footer">
+            <div class="footer-content">
+        </footer>
     </div>
 
     <script>
@@ -424,17 +439,17 @@
             return hours * 60 + minutes;
         }
 
-        // 工具函数：分钟数转时间字符串（xx小时xx分钟后开始）
+        // 工具函数：分钟数转时间字符串（xx小时xx分钟后）
         function minutesToTimeString(totalMinutes) {
             const hours = Math.floor(totalMinutes / 60);
             const minutes = totalMinutes % 60;
 
             if (hours > 0 && minutes > 0) {
-                return `${hours}小时${minutes}分钟后开始`;
+                return `${hours}小时${minutes}分钟`;
             } else if (hours > 0) {
-                return `${hours}小时后开始`;
+                return `${hours}小时`;
             } else {
-                return `${minutes}分钟后开始`;
+                return `0小时${minutes}分钟`;
             }
         }
 
@@ -497,7 +512,7 @@
 
             // 移动端检测
             const isMobile = window.innerWidth <= 768;
-            
+
             if (isMobile) {
                 // 移动端显示：时间在上，日期在下
                 currentTimeElement.innerHTML = `${timeOnly}<br><span>${dateString}</span>`;
@@ -514,19 +529,19 @@
 
             let titleStatus;
             if (currentCourse) {
-                titleStatus = `利爪正在：${currentCourse.name}`;
-                statusMainElement.textContent = `利爪正在：${currentCourse.name}`;
+                titleStatus = `利爪正在进行${currentCourse.name}`;
+                statusMainElement.textContent = `【进行中】${currentCourse.name}`;
                 statusMainElement.className = 'status-main status-in-class';
 
                 const progressPercent = Math.min(100, Math.max(0, currentCourse.progress));
                 statusDetailElement.textContent =
-                    `${currentCourse.startTime}-${currentCourse.endTime}（已上课 ${currentCourse.minutesPassed}/${currentCourse.totalMinutes} 分钟）`;
+                    `${currentCourse.startTime}-${currentCourse.endTime}（已进行 ${currentCourse.minutesPassed}/${currentCourse.totalMinutes} 分钟）`;
 
                 progressFillElement.style.width = `${progressPercent}%`;
 
             } else if (nextCourse && nextCourse.minutesUntil <= 60) {
-                titleStatus = `准备${nextCourse.name}`;
-                statusMainElement.textContent = `利爪正在：准备${nextCourse.name}`;
+                titleStatus = `利爪正在准备${nextCourse.name}`;
+                statusMainElement.textContent = `【准备中】${nextCourse.name}`;
                 statusMainElement.className = 'status-main status-prepare';
 
                 const timeString = minutesToTimeString(nextCourse.minutesUntil);
@@ -536,8 +551,8 @@
                 progressFillElement.style.width = '0%';
 
             } else {
-                titleStatus = '休息';
-                statusMainElement.textContent = '利爪正在：休息中~';
+                titleStatus = '利爪正在休息中~';
+                statusMainElement.textContent = '【休息中】';
                 statusMainElement.className = 'status-main status-rest';
                 statusDetailElement.textContent = '';
                 progressFillElement.style.width = '0%';
@@ -588,7 +603,7 @@
             });
 
             if (futureCourses.length === 0) {
-                container.innerHTML = '<div class="no-courses">近期没有课程安排</div>';
+                container.innerHTML = '<div class="no-courses">本周没有课程安排~可能学期结束或出问题了？</div>';
                 return;
             }
 
@@ -667,6 +682,12 @@
 
                 function updateAll() {
                     const now = new Date();
+
+                    // 计算当前周次
+                    const currentWeek = getCurrentWeek(schedule.semesterStart);
+
+                    // 更新周数显示
+                    document.getElementById('weekNumber').textContent = currentWeek;
 
                     // 检查当前状态
                     const { currentCourse, nextCourse } = checkCurrentStatus(schedule.courses, currentWeek, now);
