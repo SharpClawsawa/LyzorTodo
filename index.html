@@ -73,6 +73,11 @@
             transition: width 0.3s ease;
         }
 
+        /* 准备状态的进度条颜色 */
+        .progress-fill.prepare {
+            background: linear-gradient(90deg, #ffd93d, #ff9a00);
+        }
+
         /* 课程表区域 - 透明背景 */
         .schedule-section {
             background: rgba(0, 0, 0, 0.4);
@@ -449,7 +454,7 @@
             } else if (hours > 0) {
                 return `${hours}小时后开始`;
             } else {
-                return `0小时${minutes}分钟后开始`;
+                return `${minutes}分钟后开始`;
             }
         }
 
@@ -477,12 +482,14 @@
                         break;
                     }
 
-                    // 下一个课程
-                    if (currentMinutes < startMinutes && (!nextCourse || startMinutes < timeToMinutes(nextCourse.startTime))) {
-                        nextCourse = {
-                            ...course,
-                            minutesUntil: startMinutes - currentMinutes
-                        };
+                    // 下一个课程（60分钟内开始的）
+                    if (currentMinutes < startMinutes && startMinutes - currentMinutes <= 60) {
+                        if (!nextCourse || startMinutes < timeToMinutes(nextCourse.startTime)) {
+                            nextCourse = {
+                                ...course,
+                                minutesUntil: startMinutes - currentMinutes
+                            };
+                        }
                     }
                 }
             }
@@ -538,6 +545,7 @@
                     `${currentCourse.startTime}-${currentCourse.endTime}（已进行 ${currentCourse.minutesPassed}/${currentCourse.totalMinutes} 分钟）`;
 
                 progressFillElement.style.width = `${progressPercent}%`;
+                progressFillElement.className = 'progress-fill';
 
             } else if (nextCourse && nextCourse.minutesUntil <= 60) {
                 titleStatus = `利爪正在准备${nextCourse.name}`;
@@ -548,7 +556,10 @@
                 statusDetailElement.textContent =
                     `${nextCourse.startTime}-${nextCourse.endTime}（${timeString}）`;
 
-                progressFillElement.style.width = '0%';
+                // 准备状态的倒计时进度条：从100%到0%
+                const prepareProgressPercent = Math.max(0, Math.min(100, (nextCourse.minutesUntil / 60) * 100));
+                progressFillElement.style.width = `${prepareProgressPercent}%`;
+                progressFillElement.className = 'progress-fill prepare';
 
             } else {
                 titleStatus = '利爪正在休息中~';
@@ -556,6 +567,7 @@
                 statusMainElement.className = 'status-main status-rest';
                 statusDetailElement.textContent = '';
                 progressFillElement.style.width = '0%';
+                progressFillElement.className = 'progress-fill';
             }
 
             document.title = `${titleTime} | ${titleStatus}`;
@@ -603,7 +615,7 @@
             });
 
             if (futureCourses.length === 0) {
-                container.innerHTML = '<div class="no-courses">本周没有课程安排~可能学期结束或出问题了？</div>';
+                container.innerHTML = '<div class="no-courses">本周已经没有日程安排啦~休息awa~</div>';
                 return;
             }
 
