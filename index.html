@@ -22,46 +22,115 @@
             min-height: 100vh;
             color: white;
             overflow-x: hidden;
+            padding: 20px;
         }
 
-        /* 时间显示区域 - 左对齐 */
-        .time-section {
-            height: 100vh;
+        /* 主容器 */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            padding: 20px 10%;
+            gap: 30px;
+        }
+
+        /* 顶部状态区域 - PC端左右布局 */
+        .status-container {
+            display: flex;
+            gap: 30px;
+            width: 100%;
+        }
+
+        /* 时间日期卡片 */
+        .time-card {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 20px;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            /* 改为从顶部开始 */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
 
         .current-time {
-            font-size: 14rem;
+            font-size: 8rem;
             font-weight: 300;
             margin-bottom: 10px;
             text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-            letter-spacing: 2px;
+            letter-spacing: 1px;
             text-align: left;
+            margin-top: 0;
+            /* 确保没有上边距 */
         }
 
-        .status-main {
-            font-size: 3rem;
-            font-weight: bold;
-            margin: 20px 0;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-            text-align: left;
-        }
-
-        .status-detail {
+        .current-date {
             font-size: 1.8rem;
             opacity: 0.9;
             text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
             text-align: left;
+            /* 改为左对齐 */
+        }
+
+        /* 状态卡片 */
+        /* 状态卡片 */
+        .status-card {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 20px;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            /* 改为从顶部开始 */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+
+        .status-title {
+            font-size: 2.5rem;
+            text-align: left;
+            /* 改为左对齐 */
+            margin-bottom: 20px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .time-title {
+            font-size: 2.5rem;
+            text-align: left;
+            margin-bottom: 5px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+            color: white;
+            display: block;
+            /* PC端默认显示 */
+        }
+
+        .status-main {
+            font-size: 2.2rem;
+            font-weight: bold;
+            margin: 20px 0;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+            text-align: left;
+            /* 改为左对齐 */
+        }
+
+        .status-detail {
+            font-size: 1.5rem;
+            opacity: 0.9;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+            text-align: left;
+            /* 改为左对齐 */
+            margin-bottom: 20px;
         }
 
         .progress-bar {
-            width: 400px;
-            height: 6px;
+            width: 100%;
+            height: 8px;
             background: rgba(255, 255, 255, 0.2);
-            border-radius: 3px;
+            border-radius: 4px;
             margin: 20px 0;
             overflow: hidden;
         }
@@ -69,7 +138,7 @@
         .progress-fill {
             height: 100%;
             background: linear-gradient(90deg, #ff6b6b, #ee5a24);
-            border-radius: 3px;
+            border-radius: 4px;
             transition: width 0.3s ease;
         }
 
@@ -78,24 +147,24 @@
             background: linear-gradient(90deg, #ffd93d, #ff9a00);
         }
 
-        /* 课程表区域 - 透明背景 */
+        /* 课程表区域 */
         .schedule-section {
             background: rgba(0, 0, 0, 0.4);
-            /* 更透明的背景 */
-            backdrop-filter: blur(15px);
-            padding: 60px 10% 40px;
-            min-height: 100vh;
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
 
         .section-title {
-            font-size: 2.5rem;
-            text-align: center;
+            font-size: 2rem;
+            text-align: left;
             margin-bottom: 40px;
             color: white;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
         }
 
-        /* 课程列表 - 透明设计 */
+        /* 课程列表 */
         .courses-container {
             display: flex;
             flex-direction: column;
@@ -111,7 +180,6 @@
             align-items: center;
             transition: all 0.3s ease;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
         }
 
         .course-item.current {
@@ -174,105 +242,77 @@
             color: #ff6b6b;
         }
 
-        /* 滚动提示 */
-        .scroll-hint {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 1rem;
-            opacity: 0.7;
-            animation: bounce 2s infinite;
-        }
-
-        @keyframes bounce {
-
-            0%,
-            20%,
-            50%,
-            80%,
-            100% {
-                transform: translateX(-50%) translateY(0);
-            }
-
-            40% {
-                transform: translateX(-50%) translateY(-10px);
-            }
-
-            60% {
-                transform: translateX(-50%) translateY(-5px);
-            }
-        }
-
         .no-courses {
             text-align: center;
+            /* 改为左对齐 */
             padding: 60px;
             font-size: 1.4rem;
             opacity: 0.7;
         }
 
-        /* 页面标题样式 */
-        .page-title {
-            font-size: 4rem;
-            text-align: left;
-            margin-bottom: 30px;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-            color: white;
-            letter-spacing: 1px;
-        }
-
         /* 移动端优化 */
         @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
 
-            /* 时间显示区域优化 */
-            .time-section {
-                padding: 20px 5%;
-                justify-content: flex-start;
-                padding-top: 20vh;
+            .time-title {
+                font-size: 2rem;
+                text-align: left;
+            }
+
+            .main-container {
+                gap: 20px;
+            }
+
+            .status-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .time-card,
+            .status-card,
+            .schedule-section {
+                padding: 30px 20px;
+                border-radius: 15px;
             }
 
             .current-time {
-                font-size: 5rem;
-                text-align: center;
+                font-size: 3.5rem;
+                text-align: left;
+                /* 移动端也保持左对齐 */
+            }
+
+            .current-date {
+                font-size: 1.4rem;
+                text-align: left;
+                /* 移动端也保持左对齐 */
+            }
+
+            .status-title {
+                font-size: 2rem;
                 margin-bottom: 20px;
-            }
-
-            .current-time br {
-                display: block;
-                margin-top: 10px;
-            }
-
-            .current-time span {
-                font-size: 1.2rem !important;
-                display: block;
-                margin-top: 5px;
+                text-align: left;
+                /* 移动端也保持左对齐 */
             }
 
             .status-main {
                 font-size: 1.8rem;
-                text-align: center;
-                margin: 15px 0;
+                text-align: left;
+                /* 移动端也保持左对齐 */
             }
 
             .status-detail {
                 font-size: 1.2rem;
-                text-align: center;
-            }
-
-            .progress-bar {
-                width: 100%;
-                max-width: 300px;
-                margin: 20px auto;
-            }
-
-            /* 课程表区域优化 */
-            .schedule-section {
-                padding: 40px 5% 20px;
+                text-align: left;
+                /* 移动端也保持左对齐 */
             }
 
             .section-title {
-                font-size: 1.8rem;
+                font-size: 1.7rem;
                 margin-bottom: 30px;
+                text-align: left;
+                /* 移动端也保持左对齐 */
             }
 
             /* 课程项优化 - 改为垂直布局 */
@@ -298,6 +338,7 @@
             .course-right {
                 width: 100%;
                 text-align: left;
+                /* 移动端改为左对齐 */
                 min-width: auto;
                 display: flex;
                 justify-content: space-between;
@@ -312,26 +353,12 @@
             .time-status {
                 font-size: 1rem;
             }
-
-            /* 隐藏移动端不需要的元素 */
-            .scroll-hint {
-                display: none;
-            }
-
-            /* 触摸友好的交互 */
-            .course-item {
-                cursor: pointer;
-            }
-
-            .course-item:active {
-                transform: scale(0.98);
-            }
         }
 
         /* 小屏手机优化 */
         @media (max-width: 480px) {
             .current-time {
-                font-size: 4rem;
+                font-size: 3rem;
             }
 
             .status-main {
@@ -363,48 +390,39 @@
                 padding: 4px 8px;
             }
         }
-
-        /* 横屏模式优化 */
-        @media (max-height: 500px) and (orientation: landscape) {
-            .time-section {
-                padding-top: 10vh;
-                height: auto;
-                min-height: 100vh;
-            }
-
-            .current-time {
-                font-size: 4rem;
-            }
-
-            .status-main {
-                font-size: 1.5rem;
-            }
-        }
     </style>
 </head>
 
 <body>
-    <!-- 时间显示区域 -->
-    <div class="time-section">
-        <div class="page-title">利爪现在在做什么？</div>
-        <div class="current-time" id="currentTime">--:--:--</div>
-        <div class="status-main" id="statusMain">加载中...</div>
-        <div class="status-detail" id="statusDetail"></div>
-        <div class="progress-bar">
-            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
-        </div>
-        <div class="scroll-hint">↓ 下滑查看课程表喵~ ↓</div>
-    </div>
+    <!-- 主容器 -->
+    <div class="main-container">
+        <!-- 顶部状态区域 -->
+        <div class="status-container">
+            <!-- 时间日期卡片 -->
+            <div class="time-card">
+                <div class="time-title">现在是：</div>
+                <div class="current-time" id="currentTime">--:--:--</div>
+                <div class="current-date" id="currentDate">加载中...</div>
+            </div>
 
-    <!-- 课程表区域 -->
-    <div class="schedule-section">
-        <div class="section-title" id="weekTitle">📅 本周日程 - 第<span id="weekNumber">1</span>周</div>
-        <div class="courses-container" id="coursesContainer">
-            <div class="no-courses">正在加载中~别急...</div>
+            <!-- 状态卡片 -->
+            <div class="status-card">
+                <div class="status-title">利爪正在干什么?</div>
+                <div class="status-main" id="statusMain">加载中...</div>
+                <div class="status-detail" id="statusDetail"></div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+            </div>
         </div>
-        <footer class="site-footer">
-            <div class="footer-content">
-        </footer>
+
+        <!-- 课程表区域 -->
+        <div class="schedule-section">
+            <div class="section-title" id="weekTitle">📅 本周日程 - 第<span id="weekNumber">1</span>周</div>
+            <div class="courses-container" id="coursesContainer">
+                <div class="no-courses">正在加载中~别急...</div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -499,6 +517,7 @@
 
         function updateStatusDisplay(currentCourse, nextCourse, currentTime) {
             const currentTimeElement = document.getElementById('currentTime');
+            const currentDateElement = document.getElementById('currentDate');
             const statusMainElement = document.getElementById('statusMain');
             const statusDetailElement = document.getElementById('statusDetail');
             const progressFillElement = document.getElementById('progressFill');
@@ -506,8 +525,9 @@
             // 1. 更新日期和时间显示
             const dateString = currentTime.toLocaleDateString('zh-CN', {
                 year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
+                month: 'long',
+                day: 'numeric'
+            }) + ' ' + currentTime.toLocaleDateString('zh-CN', {
                 weekday: 'long'
             });
 
@@ -517,17 +537,8 @@
                 second: '2-digit'
             });
 
-            // 移动端检测
-            const isMobile = window.innerWidth <= 768;
-
-            if (isMobile) {
-                // 移动端显示：时间在上，日期在下
-                currentTimeElement.innerHTML = `${timeOnly}<br><span>${dateString}</span>`;
-            } else {
-                // PC端保持原有显示
-                currentTimeElement.innerHTML = `${timeOnly}<br><span style="font-size: 2rem; opacity: 0.8;">${dateString}</span>`;
-            }
-
+            currentTimeElement.textContent = timeOnly;
+            currentDateElement.textContent = dateString;
             // 2. 更新页面标题
             const titleTime = currentTime.toLocaleTimeString('zh-CN', {
                 hour: '2-digit',
@@ -615,7 +626,7 @@
             });
 
             if (futureCourses.length === 0) {
-                container.innerHTML = '<div class="no-courses">本周已经没有日程安排啦~休息awa~</div>';
+                container.innerHTML = '<div class="no-courses">本周已经没有日程安排啦~\n休息awa~</div>';
                 return;
             }
 
